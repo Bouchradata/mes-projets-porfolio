@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Académie · Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   THEMES
+══════════════════════════════════════ */
+:root {
+  --accent:#4f6ef7;--accent2:#7c94f9;--accent-bg:rgba(79,110,247,.12);
+  --bg:#0d0d14;--bg2:#13131f;--bg3:#1a1a2e;--bg4:#222238;
+  --border:rgba(255,255,255,.06);--bord2:rgba(255,255,255,.12);
+  --text:#e8e6f0;--muted:#6b6880;--dim:#2e2d44;
+  --green:#5ecfa0;--green-bg:rgba(94,207,160,.1);
+  --amber:#f5b942;--amber-bg:rgba(245,185,66,.1);
+  --rose:#f472b6;--rose-bg:rgba(244,114,182,.1);
+  --red:#f87171;--red-bg:rgba(248,113,113,.1);
+  --r:14px;--r-sm:8px;--r-xs:6px;
+}
+[data-theme="emerald"] {
+  --accent:#2ecc8f;--accent2:#5ddcae;--accent-bg:rgba(46,204,143,.12);
+  --bg:#091410;--bg2:#0e1e18;--bg3:#142a22;--bg4:#1c3830;
+  --border:rgba(255,255,255,.06);--bord2:rgba(255,255,255,.12);
+  --text:#e0f0ea;--muted:#5a8070;--dim:#1c3830;
+}
+[data-theme="beige"] {
+  --accent:#8b6f47;--accent2:#b8916a;--accent-bg:rgba(139,111,71,.1);
+  --bg:#faf7f2;--bg2:#f5f0e8;--bg3:#ede6d8;--bg4:#e5dcc8;
+  --border:rgba(0,0,0,.08);--bord2:rgba(0,0,0,.14);
+  --text:#2c2416;--muted:#8a7a68;--dim:#d5c9b0;
+  --green:#3a8f65;--green-bg:rgba(58,143,101,.1);
+  --amber:#b8860b;--amber-bg:rgba(184,134,11,.1);
+  --rose:#c05080;--rose-bg:rgba(192,80,128,.1);
+}
+
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;transition:background .3s,color .3s;}
+button,input,textarea,select{font-family:inherit;}
+code,pre{font-family:'JetBrains Mono',monospace;}
+
+/* ══════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════ */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);height:54px;display:flex;align-items:center;padding:0 1.25rem;gap:1rem;position:sticky;top:0;z-index:300;flex-shrink:0;}
+.logo{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;white-space:nowrap;letter-spacing:-.3px;}
+.logo em{font-style:italic;color:var(--accent);}
+.tabs{display:flex;gap:3px;flex:1;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:7px 14px;border-radius:var(--r-sm);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;color:var(--muted);border:1px solid transparent;transition:all .15s;}
+.tab:hover{color:var(--text);background:var(--bg3);}
+.tab.active{color:var(--text);background:var(--bg3);border-color:var(--bord2);}
+.tab-pip{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+
+/* theme switcher */
+.theme-switcher{display:flex;gap:5px;align-items:center;flex-shrink:0;}
+.th-btn{width:20px;height:20px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .15s;}
+.th-btn:hover,.th-btn.active{border-color:var(--text);transform:scale(1.15);}
+.th-royal{background:linear-gradient(135deg,#4f6ef7,#7c94f9);}
+.th-emerald{background:linear-gradient(135deg,#2ecc8f,#5ddcae);}
+.th-beige{background:linear-gradient(135deg,#c9a87c,#e8d5b0);}
+
+/* ══════════════════════════════════════
+   SHELL
+══════════════════════════════════════ */
+.shell{display:flex;flex:1;min-height:0;overflow:hidden;}
+
+/* ══════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════ */
+.sidebar{width:215px;background:var(--bg2);border-right:1px solid var(--border);flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;}
+.sb-sec{padding:.6rem .6rem .3rem;}
+.sb-lbl{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:4px 8px 5px;display:flex;justify-content:space-between;align-items:center;}
+.sb-add{font-size:17px;cursor:pointer;color:var(--muted);line-height:1;transition:color .15s;}
+.sb-add:hover{color:var(--accent);}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--r-sm);cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;margin-bottom:1px;border:1px solid transparent;position:relative;}
+.sb-item:hover{background:var(--bg3);color:var(--text);}
+.sb-item.active{background:var(--bg3);color:var(--text);border-color:var(--bord2);}
+.sb-del{position:absolute;right:5px;font-size:11px;color:var(--muted);opacity:0;cursor:pointer;padding:2px 4px;border-radius:4px;transition:all .15s;}
+.sb-item:hover .sb-del{opacity:1;}
+.sb-del:hover{color:var(--red);background:var(--red-bg);}
+.pbar-mini{flex:1;background:var(--bg4);border-radius:100px;height:3px;overflow:hidden;max-width:34px;margin-left:auto;}
+.pbar-fill{height:100%;border-radius:100px;background:var(--accent);}
+
+/* ══════════════════════════════════════
+   CONTENT / PAGES
+══════════════════════════════════════ */
+.content{flex:1;overflow-y:auto;}
+.page{display:none;animation:fadeUp .22s ease;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════ */
+.ph{padding:1.6rem 2rem 1.2rem;border-bottom:1px solid var(--border);}
+.ph h1{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;letter-spacing:-.3px;}
+.ph p{font-size:12.5px;color:var(--muted);margin-top:4px;}
+.pad{padding:1.4rem 2rem;}
+
+/* ══════════════════════════════════════
+   CARDS
+══════════════════════════════════════ */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:.9rem;}
+.ct{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.9rem;display:flex;justify-content:space-between;align-items:center;}
+
+/* ══════════════════════════════════════
+   COUNTDOWN HERO
+══════════════════════════════════════ */
+.countdown-hero{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.4rem 2rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
+.cd-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1.3rem;text-align:center;flex:1;min-width:100px;}
+.cd-n{font-size:28px;font-weight:700;font-family:'Playfair Display',serif;color:var(--accent);line-height:1;}
+.cd-l{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.07em;}
+.streak-hero{flex:2;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1.3rem;display:flex;align-items:center;gap:1rem;}
+.streak-n{font-size:36px;font-weight:700;font-family:'Playfair Display',serif;color:var(--green);line-height:1;}
+.streak-info{flex:1;}
+.streak-label{font-size:13px;font-weight:500;}
+.streak-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.streak-warn{font-size:11px;color:var(--amber);margin-top:4px;}
+
+/* ══════════════════════════════════════
+   WEEK STRIP
+══════════════════════════════════════ */
+.week-strip{display:flex;gap:5px;margin-bottom:1.2rem;}
+.wd{flex:1;height:38px;border-radius:var(--r-sm);background:var(--bg3);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:var(--muted);gap:1px;}
+.wd .wdl{font-weight:600;font-size:11px;}
+.wd.done{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+.wd.today{border-color:var(--accent);color:var(--accent);}
+.wd.done.today{background:var(--green-bg);border-color:var(--accent);}
+
+/* ══════════════════════════════════════
+   TRACKING GRID
+══════════════════════════════════════ */
+.track-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:1.2rem;}
+.track-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem;display:flex;align-items:center;gap:11px;cursor:pointer;transition:all .2s;user-select:none;position:relative;}
+.track-card:hover{border-color:var(--bord2);}
+.track-card.done{border-color:var(--green);background:var(--green-bg);}
+.ti{font-size:22px;flex-shrink:0;}
+.tinfo{flex:1;min-width:0;}
+.tn{font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ts{font-size:11px;color:var(--muted);margin-top:1px;}
+.tcheck{width:21px;height:21px;border-radius:50%;border:2px solid var(--dim);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all .2s;}
+.track-card.done .tcheck{background:var(--green);border-color:var(--green);color:#071a0f;}
+.tdel{position:absolute;top:5px;right:5px;font-size:11px;color:var(--muted);opacity:0;cursor:pointer;padding:2px 4px;border-radius:3px;transition:all .15s;}
+.track-card:hover .tdel{opacity:1;}
+.tdel:hover{color:var(--red);background:var(--red-bg);}
+
+/* ══════════════════════════════════════
+   MOTIVATION CARD
+══════════════════════════════════════ */
+.motiv-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;position:relative;overflow:hidden;}
+.motiv-stripe{position:absolute;top:0;left:0;width:3px;height:100%;}
+.motiv-tag{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+.motiv-formula{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;line-height:1.3;margin-bottom:.7rem;}
+.motiv-who{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;}
+.motiv-body{font-size:13.5px;line-height:1.85;color:var(--muted);}
+.motiv-body strong{color:var(--text);font-weight:500;}
+.motiv-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;line-height:1.75;color:var(--text);}
+.motiv-src{font-size:11px;color:var(--muted);margin-top:.4rem;}
+.motiv-nav{display:flex;justify-content:flex-end;gap:6px;margin-top:1rem;}
+.motiv-btn{font-size:12px;padding:5px 13px;border-radius:20px;border:1px solid var(--bord2);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
+.motiv-btn:hover{color:var(--text);background:var(--bg3);}
+.motiv-dots{display:flex;gap:4px;align-items:center;flex:1;}
+.mdot{width:5px;height:5px;border-radius:50%;background:var(--dim);cursor:pointer;transition:all .15s;}
+.mdot.active{background:var(--accent);width:14px;border-radius:3px;}
+
+/* ══════════════════════════════════════
+   PROJET
+══════════════════════════════════════ */
+.proj-hero{padding:1.4rem 2rem 1.2rem;border-bottom:1px solid var(--border);background:var(--bg2);}
+.proj-badge{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;}
+.proj-hero h1{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:.4rem;}
+.proj-hero p{font-size:13px;color:var(--muted);line-height:1.65;max-width:700px;}
+.chip-row{display:flex;gap:5px;margin-top:.75rem;flex-wrap:wrap;}
+.chip{font-size:10.5px;padding:3px 10px;border-radius:20px;border:1px solid;}
+.chip-accent{background:var(--accent-bg);color:var(--accent);border-color:rgba(79,110,247,.2);}
+.chip-green{background:var(--green-bg);color:var(--green);border-color:rgba(94,207,160,.2);}
+.chip-amber{background:var(--amber-bg);color:var(--amber);border-color:rgba(245,185,66,.2);}
+
+.proj-layout{display:grid;grid-template-columns:1fr 260px;}
+.proj-main{padding:1.4rem 2rem;border-right:1px solid var(--border);}
+.proj-aside{padding:1.2rem;background:var(--bg2);overflow-y:auto;}
+.aside-t{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.7rem;}
+
+/* steps */
+.steps{display:flex;flex-direction:column;gap:0;margin-bottom:1.2rem;}
+.step{display:flex;gap:12px;padding:.85rem 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.step:last-child{border-bottom:none;}
+.step-left{display:flex;flex-direction:column;align-items:center;padding-top:1px;}
+.step-num{width:26px;height:26px;border-radius:50%;border:2px solid var(--dim);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;color:var(--muted);transition:all .2s;}
+.step-line{width:2px;flex:1;background:var(--dim);margin-top:3px;min-height:16px;transition:background .2s;}
+.step.done .step-num{background:var(--green);border-color:var(--green);color:#071a0f;}
+.step.done .step-line{background:var(--green);}
+.step.current .step-num{border-color:var(--accent);color:var(--accent);}
+.step-body{flex:1;padding-bottom:2px;}
+.step-title{font-size:13.5px;font-weight:500;margin-bottom:2px;}
+.step.done .step-title{color:var(--muted);}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.65;}
+.step-code{font-size:11.5px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-xs);padding:6px 10px;margin-top:6px;color:var(--accent);font-family:'JetBrains Mono',monospace;line-height:1.6;}
+
+/* questions */
+.q-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;}
+.q-item{display:flex;align-items:flex-start;gap:9px;padding:.8rem 1rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;transition:all .15s;position:relative;}
+.q-item:hover{border-color:var(--bord2);}
+.q-item.done-q{background:var(--green-bg);border-color:rgba(94,207,160,.2);}
+.q-num{font-size:10.5px;font-weight:600;color:var(--muted);min-width:20px;padding-top:2px;}
+.q-body{flex:1;}
+.q-text{font-size:13px;line-height:1.5;}
+.q-item.done-q .q-text{color:var(--green);}
+.q-ans{font-size:11px;color:var(--muted);margin-top:2px;font-family:'JetBrains Mono',monospace;}
+.q-hint{font-size:11px;color:var(--accent);margin-top:3px;font-family:'JetBrains Mono',monospace;opacity:.8;}
+.q-check{font-size:13px;flex-shrink:0;margin-top:1px;}
+.qdel{font-size:10px;color:var(--muted);opacity:0;cursor:pointer;padding:2px 4px;border-radius:3px;transition:all .15s;flex-shrink:0;}
+.q-item:hover .qdel{opacity:1;}
+.qdel:hover{color:var(--red);background:var(--red-bg);}
+
+/* tools used */
+.tools-section{margin-top:1.2rem;}
+.tool-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.tool-name{font-size:12px;font-family:'JetBrains Mono',monospace;min-width:130px;color:var(--text);}
+.tool-bar{flex:1;background:var(--bg4);border-radius:100px;height:5px;overflow:hidden;}
+.tool-fill{height:100%;border-radius:100px;transition:width .5s ease;}
+.tool-lvl{font-size:11px;color:var(--muted);min-width:28px;text-align:right;}
+
+/* progress ring */
+.ring-wrap{display:flex;justify-content:center;margin:.8rem 0;}
+.ring{position:relative;width:78px;height:78px;}
+.ring svg{transform:rotate(-90deg);}
+.ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;font-family:'Playfair Display',serif;}
+
+.cl-list{display:flex;flex-direction:column;gap:5px;margin-top:.5rem;}
+.cl-item{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.cl-dot{width:5px;height:5px;border-radius:50%;background:var(--dim);flex-shrink:0;}
+.cl-item.ok{color:var(--text);}
+.cl-item.ok .cl-dot{background:var(--green);}
+
+/* ══════════════════════════════════════
+   NIVEAU
+══════════════════════════════════════ */
+.sk-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.sk-name{font-size:13px;min-width:165px;}
+.sk-bar{flex:1;background:var(--bg4);border-radius:100px;height:5px;overflow:hidden;}
+.sk-fill{height:100%;border-radius:100px;background:var(--accent);transition:width .6s ease;}
+.sk-val{font-size:11.5px;color:var(--muted);min-width:36px;text-align:right;}
+
+/* ══════════════════════════════════════
+   COMMANDES
+══════════════════════════════════════ */
+.cmd-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:.65rem 1rem;margin-bottom:5px;font-size:12.5px;}
+.cmd-row.highlight{background:var(--accent-bg);border-color:rgba(79,110,247,.2);}
+
+/* ══════════════════════════════════════
+   ADD BUTTON
+══════════════════════════════════════ */
+.add-btn{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--bord2);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
+.add-btn:hover{background:var(--bg3);color:var(--text);}
+.del-btn{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--red-bg);background:var(--red-bg);color:var(--red);cursor:pointer;transition:all .15s;width:100%;justify-content:center;margin-top:.5rem;}
+.del-btn:hover{opacity:.8;}
+
+/* ══════════════════════════════════════
+   MODAL
+══════════════════════════════════════ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(3px);}
+.overlay.hidden{display:none;}
+.modal{background:var(--bg2);border:1px solid var(--bord2);border-radius:var(--r);padding:1.5rem;width:100%;max-width:430px;max-height:90vh;overflow-y:auto;}
+.modal h2{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:1.1rem;}
+.fg{margin-bottom:.85rem;}
+.fl{font-size:11.5px;color:var(--muted);margin-bottom:4px;display:block;}
+.fi,.ft,.fsel{width:100%;background:var(--bg3);border:1px solid var(--bord2);border-radius:var(--r-sm);padding:8px 11px;color:var(--text);outline:none;font-size:13px;transition:border-color .15s;}
+.fi:focus,.ft:focus{border-color:var(--accent);}
+.ft{min-height:75px;resize:vertical;}
+.fsel{cursor:pointer;}
+.fsel option{background:var(--bg3);}
+.modal-btns{display:flex;gap:7px;justify-content:flex-end;margin-top:1.1rem;}
+.btn-c{padding:8px 17px;border-radius:20px;border:1px solid var(--bord2);background:transparent;color:var(--muted);cursor:pointer;font-size:13px;}
+.btn-c:hover{background:var(--bg3);color:var(--text);}
+.btn-ok{padding:8px 20px;border-radius:20px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:13px;font-weight:500;}
+.btn-ok:hover{opacity:.88;}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:860px){.sidebar{display:none;}.proj-layout{grid-template-columns:1fr;}.proj-aside{border-top:1px solid var(--border);}}
+@media(max-width:580px){.pad,.proj-main,.ph{padding:1rem;}.track-grid{grid-template-columns:1fr;}.countdown-hero{flex-direction:column;}.cd-box{min-width:0;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">Mon Académie <em>·</em> Data</div>
+  <div class="tabs" id="tab-bar">
+    <div class="tab active" data-tab="accueil" onclick="goTab('accueil',this)"><span class="tab-pip" style="background:var(--green)"></span>Accueil</div>
+    <div class="tab" data-tab="projets" onclick="goTab('projets',this)"><span class="tab-pip" style="background:var(--accent)"></span>Projets</div>
+    <div class="tab" data-tab="niveau" onclick="goTab('niveau',this)"><span class="tab-pip" style="background:var(--amber)"></span>Mon niveau</div>
+    <div class="tab" data-tab="commandes" onclick="goTab('commandes',this)"><span class="tab-pip" style="background:var(--rose)"></span>Commandes</div>
+  </div>
+  <div class="theme-switcher">
+    <div class="th-btn th-royal active" title="Bleu royal" onclick="setTheme('royal',this)"></div>
+    <div class="th-btn th-emerald" title="Vert émeraude" onclick="setTheme('emerald',this)"></div>
+    <div class="th-btn th-beige" title="Beige minimaliste" onclick="setTheme('beige',this)"></div>
+  </div>
+</div>
+
+<div class="shell">
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar">
+  <div id="sb-accueil" class="sb-sec">
+    <div class="sb-lbl">Navigation</div>
+    <div class="sb-item active"><span style="font-size:14px">🏠</span>Tableau de bord</div>
+  </div>
+  <div id="sb-projets" class="sb-sec" style="display:none">
+    <div class="sb-lbl">Mes projets <span class="sb-add" onclick="openModal('projet')" title="Ajouter">＋</span></div>
+    <div id="sb-proj-list"></div>
+  </div>
+  <div id="sb-niveau" class="sb-sec" style="display:none">
+    <div class="sb-lbl">Compétences</div>
+    <div class="sb-item" onclick="goTab('niveau',null)"><span style="font-size:14px">📊</span>Mon niveau</div>
+    <div class="sb-item" onclick="goTab('commandes',null)"><span style="font-size:14px">🐍</span>Commandes</div>
+  </div>
+</nav>
+
+<!-- ══ CONTENT ══ -->
+<div class="content">
+
+<!-- ════════ ACCUEIL ════════ -->
+<div class="page active" id="page-accueil">
+
+  <!-- Countdown hero -->
+  <div class="countdown-hero">
+    <div class="cd-box"><div class="cd-n" id="cd-days">—</div><div class="cd-l">Jours restants</div></div>
+    <div class="cd-box"><div class="cd-n" id="cd-done">—</div><div class="cd-l">Jours écoulés</div></div>
+    <div class="cd-box"><div class="cd-n" id="cd-pct">—</div><div class="cd-l">Progression</div></div>
+    <div class="streak-hero">
+      <div class="streak-n" id="streak-n">0</div>
+      <div class="streak-info">
+        <div class="streak-label">Jours consécutifs 🔥</div>
+        <div class="streak-sub">Si tu ne coches rien aujourd'hui, ce compteur repart à zéro.</div>
+        <div class="streak-warn" id="streak-warn"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pad">
+    <!-- Semaine -->
+    <div style="font-size:9.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;">Cette semaine</div>
+    <div class="week-strip" id="week-strip"></div>
+
+    <!-- Tracking -->
+    <div class="ct">Coche ce que tu as fait aujourd'hui <button class="add-btn" onclick="openModal('objectif')">＋ Ajouter</button></div>
+    <div class="track-grid" id="track-grid"></div>
+
+    <!-- Motivation -->
+    <div class="ct" style="margin-top:.5rem">Réflexion du jour</div>
+    <div class="motiv-card" id="motiv-card">
+      <div class="motiv-stripe" id="motiv-stripe"></div>
+      <div style="padding-left:.4rem">
+        <div class="motiv-tag" id="motiv-tag"></div>
+        <div id="motiv-content"></div>
+        <div class="motiv-nav">
+          <div class="motiv-dots" id="motiv-dots"></div>
+          <button class="motiv-btn" onclick="prevMotiv()">←</button>
+          <button class="motiv-btn" onclick="nextMotiv()">Suivante →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ PROJETS ════════ -->
+<div class="page" id="page-projets">
+  <div id="proj-content"></div>
+</div>
+
+<!-- ════════ NIVEAU ════════ -->
+<div class="page" id="page-niveau">
+  <div class="ph"><h1>Mon niveau actuel</h1><p>Récapitulatif au 20 mars 2026 — issu de ton projet Airbnb</p></div>
+  <div class="pad">
+    <div class="card">
+      <div class="ct">Compétences Data</div>
+      <div id="skills-list"></div>
+    </div>
+    <div class="card" style="background:var(--green-bg);border-color:rgba(94,207,160,.2)">
+      <div class="ct" style="color:var(--green)">✨ Ta victoire du projet Airbnb</div>
+      <p style="font-size:13.5px;line-height:1.8;color:var(--green)">Tu as créé ton <strong>premier graphique Matplotlib</strong> et répondu à 4 questions business réelles sur des données mondiales. La visualisation passe de 0 à 1/10. C'est concret, c'est sur GitHub, c'est <em>toi</em>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ COMMANDES ════════ -->
+<div class="page" id="page-commandes">
+  <div class="ph"><h1>Mes commandes maîtrisées</h1><p>Aide-mémoire personnel — issu de ton récapitulatif Airbnb</p></div>
+  <div class="pad">
+    <div class="card">
+      <div class="ct">Pandas 🐍</div>
+      <div class="cmd-row"><code style="color:var(--accent)">import pandas as pd</code><span style="color:var(--muted)">Importer pandas</span></div>
+      <div class="cmd-row"><code style="color:var(--accent)">pd.read_csv('f.csv', sep=';')</code><span style="color:var(--muted)">Charger un CSV</span></div>
+      <div class="cmd-row"><code style="color:var(--accent)">df.shape · df.head() · df.columns</code><span style="color:var(--muted)">Explorer</span></div>
+      <div class="cmd-row"><code style="color:var(--accent)">df['col'].isna().sum()</code><span style="color:var(--muted)">Valeurs manquantes</span></div>
+      <div class="cmd-row"><code style="color:var(--accent)">pd.to_numeric(df['col'], errors='coerce')</code><span style="color:var(--muted)">Convertir en nombre</span></div>
+      <div class="cmd-row"><code style="color:var(--accent)">df.groupby('A')['B'].mean()</code><span style="color:var(--muted)">Moyenne par groupe</span></div>
+      <div class="cmd-row"><code style="color:var(--accent)">df['col'].value_counts().head(10)</code><span style="color:var(--muted)">Top 10 occurrences</span></div>
+      <div class="cmd-row"><code style="color:var(--accent)">df.dropna() · df.rename(columns={})</code><span style="color:var(--muted)">Nettoyer</span></div>
+    </div>
+    <div class="card">
+      <div class="ct">Matplotlib 📊</div>
+      <div class="cmd-row"><code style="color:var(--rose)">import matplotlib.pyplot as plt</code><span style="color:var(--muted)">Importer</span></div>
+      <div class="cmd-row"><code style="color:var(--rose)">top.plot(kind='barh', color='steelblue')</code><span style="color:var(--muted)">Barres horizontales</span></div>
+      <div class="cmd-row"><code style="color:var(--rose)">plt.title('T') · plt.xlabel('X')</code><span style="color:var(--muted)">Labels</span></div>
+      <div class="cmd-row"><code style="color:var(--rose)">plt.tight_layout()</code><span style="color:var(--muted)">Éviter les coupures</span></div>
+      <div class="cmd-row highlight"><code style="color:var(--accent);font-weight:600">plt.show()</code><span style="color:var(--accent)">⚠️ Toujours EN DERNIER</span></div>
+    </div>
+    <div class="card">
+      <div class="ct">Règles de syntaxe Python ⚡</div>
+      <div class="cmd-row"><code style="color:var(--amber)">( )</code><span style="color:var(--muted)">Après une fonction : df.head()</span></div>
+      <div class="cmd-row"><code style="color:var(--amber)">[ ]</code><span style="color:var(--muted)">Sélectionner : df['col']</span></div>
+      <div class="cmd-row"><code style="color:var(--amber)">' ' ou " "</code><span style="color:var(--muted)">Pour du texte : sep=';'</span></div>
+      <div class="cmd-row"><code style="color:var(--amber)">True / False</code><span style="color:var(--muted)">Majuscule obligatoire !</span></div>
+      <div class="cmd-row"><code style="color:var(--amber)">f'{val:.2f}'</code><span style="color:var(--muted)">Afficher 2 décimales</span></div>
+      <div class="cmd-row"><code style="color:var(--amber)">ascending=False</code><span style="color:var(--muted)">Tri décroissant</span></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /shell -->
+
+<!-- MODAL -->
+<div class="overlay hidden" id="overlay" onclick="overlayClick(event)">
+  <div class="modal">
+    <h2 id="modal-title">Ajouter</h2>
+    <div id="modal-body"></div>
+    <div class="modal-btns">
+      <button class="btn-c" onclick="closeModal()">Annuler</button>
+      <button class="btn-ok" onclick="confirmModal()">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DONNÉES PAR DÉFAUT
+// ══════════════════════════════════════════════════════
+const VER = '4.0';
+
+const DEFAULT = {
+  objectifs:[
+    {id:'priere',icon:'🕌',name:'Prière',sub:'Quotidienne'},
+    {id:'lecture',icon:'📖',name:'Lecture',sub:'20 min minimum'},
+    {id:'sport',icon:'🏃',name:'Sport',sub:'3× par semaine'},
+    {id:'data',icon:'💻',name:'Projet Data',sub:'30 min minimum'},
+  ],
+  projets:[
+    {
+      id:'p1',title:'Airbnb mondial 🏠',color:'#4f6ef7',status:'En cours',
+      context:'Tu es data analyst pour une agence immobilière. Le directeur veut savoir où investir pour ouvrir des logements Airbnb rentables dans le monde. Dataset : "Airbnb listings dataset" sur Kaggle.',
+      skills:[
+        {name:'pandas',pct:30},{name:'groupby',pct:25},{name:'matplotlib',pct:15},{name:'value_counts',pct:30},
+      ],
+      steps:[
+        {id:'s1',title:'Télécharger le dataset',desc:'Recherche "Airbnb listings dataset Kaggle" et télécharge le CSV principal.',code:'',done:true},
+        {id:'s2',title:'Explorer les données',desc:'Vérifie la taille, les colonnes et les valeurs manquantes.',code:"df.shape · df.head() · df.columns.tolist() · df.isnull().sum()",done:true},
+        {id:'s3',title:'Nettoyer la colonne Prix',desc:'Convertir en nombre, supprimer les lignes vides.',code:"df['Price'] = pd.to_numeric(df['Price'], errors='coerce')\ndf = df.dropna(subset=['Price'])",done:true},
+        {id:'s4',title:'Répondre aux 5 questions',desc:'Utiliser groupby, mean(), value_counts() pour chaque question.',code:"df.groupby('Room Type')['Price'].mean().sort_values(ascending=False)",done:false},
+        {id:'s5',title:'Créer les graphiques',desc:'Un graphique par question clé avec matplotlib.',code:"top.plot(kind='barh', color='steelblue')\nplt.title('Mon titre', fontsize=14)\nplt.show()",done:false},
+        {id:'s6',title:'Publier sur GitHub',desc:'Créer un dépôt, rédiger le README, pousser le notebook.',code:'',done:false},
+      ],
+      questions:[
+        {id:'q1',text:'Prix moyen des logements ?',hint:"df['Price'].mean()",ans:'138,07 €',done:true},
+        {id:'q2',text:'Pays avec le plus d\'annonces ?',hint:"df['Country'].value_counts().head(10)",ans:'États-Unis (134 545)',done:true},
+        {id:'q3',text:'Logements entiers plus chers que les chambres ?',hint:"df.groupby('Room Type')['Price'].mean()",ans:'173 € vs 79 €',done:true},
+        {id:'q4',text:'Villes avec les prix les plus élevés ?',hint:"df.groupby('City')['Price'].mean().sort_values(ascending=False).head(10)",ans:'Hong Kong : 656 €/nuit',done:true},
+        {id:'q5',text:'Quel pays est le plus abordable ?',hint:"df.groupby('Country')['Price'].mean().sort_values().head(5)",ans:'',done:false},
+      ]
+    },
+    {
+      id:'p2',title:'Vols aériens ✈️',color:'#f5b942',status:'À venir',
+      context:'Tu es data analyst pour une compagnie aérienne. La direction veut réduire les retards et améliorer la satisfaction client. Dataset : "2015 Flight Delays and Cancellations" sur Kaggle.',
+      skills:[
+        {name:'pandas avancé',pct:20},{name:'analyse temporelle',pct:10},{name:'groupby',pct:25},{name:'matplotlib',pct:15},
+      ],
+      steps:[
+        {id:'s1',title:'Télécharger le dataset',desc:'Recherche "flight delays dataset Kaggle" (2015 Flight Delays).',code:'',done:false},
+        {id:'s2',title:'Explorer et comprendre',desc:'Ce dataset est large — vérifie bien les noms de colonnes.',code:"df.dtypes · df.shape · df.columns.tolist()",done:false},
+        {id:'s3',title:'Nettoyer les délais',desc:'Certaines valeurs de retard peuvent être négatives (avance). Décide si tu les gardes.',code:"df['DEPARTURE_DELAY'] = pd.to_numeric(df['DEPARTURE_DELAY'], errors='coerce')",done:false},
+        {id:'s4',title:'Analyser les retards par compagnie',desc:'Groupby sur la colonne AIRLINE.',code:"df.groupby('AIRLINE')['DEPARTURE_DELAY'].mean().sort_values(ascending=False)",done:false},
+        {id:'s5',title:'Analyser par mois',desc:'Extraire le mois et voir la tendance temporelle.',code:"df.groupby('MONTH')['DEPARTURE_DELAY'].mean()",done:false},
+        {id:'s6',title:'Créer les graphiques et publier',desc:'Barres horizontales pour les compagnies, courbe pour les mois.',code:"plt.plot(mois, retards)\nplt.show()",done:false},
+      ],
+      questions:[
+        {id:'q1',text:'Quel est le taux de retard moyen (en minutes) ?',hint:"df['DEPARTURE_DELAY'].mean()",ans:'',done:false},
+        {id:'q2',text:'Quelles compagnies ont le plus de retards ?',hint:"df.groupby('AIRLINE')['DEPARTURE_DELAY'].mean().sort_values(ascending=False)",ans:'',done:false},
+        {id:'q3',text:'Quelles sont les principales causes de retards ?',hint:"df[['WEATHER_DELAY','CARRIER_DELAY','NAS_DELAY']].sum()",ans:'',done:false},
+        {id:'q4',text:'Quel aéroport de départ est le plus touché ?',hint:"df.groupby('ORIGIN_AIRPORT')['DEPARTURE_DELAY'].mean().sort_values(ascending=False).head(10)",ans:'',done:false},
+        {id:'q5',text:'Y a-t-il des mois plus touchés que d\'autres ?',hint:"df.groupby('MONTH')['DEPARTURE_DELAY'].mean() → graphique en courbe",ans:'',done:false},
+      ]
+    },
+    {
+      id:'p3',title:'Netflix 🎬',color:'#f472b6',status:'À venir',
+      context:'Tu es data analyst pour une plateforme de streaming concurrente. Elle veut comprendre la stratégie de contenu de Netflix. Dataset : "Netflix Movies and TV Shows" sur Kaggle.',
+      skills:[
+        {name:'nettoyage texte',pct:10},{name:'str.split/explode',pct:5},{name:'analyse temporelle',pct:15},{name:'matplotlib',pct:15},{name:'storytelling',pct:5},
+      ],
+      steps:[
+        {id:'s1',title:'Charger et explorer',desc:'Vérifie les colonnes : type, country, date_added, listed_in, duration.',code:"df.head() · df.dtypes · df.isnull().sum()",done:false},
+        {id:'s2',title:'Convertir les dates',desc:'La colonne date_added est en texte — il faut la convertir.',code:"df['date_added'] = pd.to_datetime(df['date_added'])\ndf['year_added'] = df['date_added'].dt.year",done:false},
+        {id:'s3',title:'Séparer films et séries',desc:'Créer deux dataframes pour analyser séparément.',code:"films = df[df['type']=='Movie']\nseries = df[df['type']=='TV Show']",done:false},
+        {id:'s4',title:'Nettoyer les genres',desc:'La colonne listed_in contient plusieurs genres — les séparer.',code:"df['listed_in'].str.split(',').explode().str.strip().value_counts().head(10)",done:false},
+        {id:'s5',title:'Répondre aux 5 questions',desc:'Utilise les dataframes créés pour répondre à chaque question.',code:'',done:false},
+        {id:'s6',title:'Graphiques et GitHub',desc:'Camembert pour films/séries, barres pour pays, courbe pour les années.',code:"plt.pie(values, labels=labels, autopct='%1.1f%%')\nplt.show()",done:false},
+      ],
+      questions:[
+        {id:'q1',text:'Combien de films vs séries sur Netflix ?',hint:"df['type'].value_counts() → graphique en camembert (pie)",ans:'',done:false},
+        {id:'q2',text:'Quels pays produisent le plus de contenu ?',hint:"df['country'].value_counts().head(10)",ans:'',done:false},
+        {id:'q3',text:'Quelle est l\'évolution des ajouts par année ?',hint:"df['year_added'].value_counts().sort_index() → courbe",ans:'',done:false},
+        {id:'q4',text:'Quels genres sont les plus représentés ?',hint:"df['listed_in'].str.split(',').explode().str.strip().value_counts().head(10)",ans:'',done:false},
+        {id:'q5',text:'Quelle est la durée moyenne des films (en minutes) ?',hint:"films['duration'].str.replace(' min','').pipe(pd.to_numeric).mean()",ans:'',done:false},
+      ]
+    },
+    {
+      id:'p4',title:'Superstore Retail 🛒',color:'#5ecfa0',status:'À venir',
+      context:'Tu es data analyst pour une grande enseigne retail américaine. Le directeur commercial veut optimiser les ventes et réduire les pertes. Dataset : "Sample Superstore" sur Kaggle.',
+      skills:[
+        {name:'analyse business',pct:5},{name:'groupby',pct:25},{name:'calcul de marges',pct:5},{name:'matplotlib',pct:15},{name:'SQL',pct:0},
+      ],
+      steps:[
+        {id:'s1',title:'Charger avec le bon encodage',desc:'Ce fichier peut avoir un problème d\'encodage — utilise latin1.',code:"df = pd.read_csv('superstore.csv', encoding='latin1')",done:false},
+        {id:'s2',title:'Explorer les colonnes business',desc:'Les colonnes clés : Sales, Profit, Category, Region, Order Date.',code:"df[['Sales','Profit','Category','Region']].head()",done:false},
+        {id:'s3',title:'Convertir les dates',desc:'Convertir Order Date pour pouvoir extraire les mois.',code:"df['Order Date'] = pd.to_datetime(df['Order Date'])\ndf['Month'] = df['Order Date'].dt.month",done:false},
+        {id:'s4',title:'Analyser le CA et les profits',desc:'Calculer les totaux par catégorie et par région.',code:"df.groupby('Category')['Sales'].sum().sort_values(ascending=False)",done:false},
+        {id:'s5',title:'Trouver les produits en perte',desc:'Filtrer les lignes où Profit est négatif.',code:"df[df['Profit']<0].groupby('Product Name')['Profit'].sum().sort_values().head(10)",done:false},
+        {id:'s6',title:'Graphiques et GitHub',desc:'Barres pour catégories, courbe pour les mois, barres négatives pour les pertes.',code:"df.groupby('Month')['Profit'].sum().plot(kind='bar')\nplt.show()",done:false},
+      ],
+      questions:[
+        {id:'q1',text:'Quel est le chiffre d\'affaires total ?',hint:"df['Sales'].sum()",ans:'',done:false},
+        {id:'q2',text:'Quelles catégories de produits se vendent le mieux ?',hint:"df.groupby('Category')['Sales'].sum().sort_values(ascending=False)",ans:'',done:false},
+        {id:'q3',text:'Quel est le mois le plus rentable ?',hint:"df.groupby('Month')['Profit'].sum().sort_values(ascending=False)",ans:'',done:false},
+        {id:'q4',text:'Quelles régions génèrent le plus de ventes ?',hint:"df.groupby('Region')['Sales'].sum().sort_values(ascending=False)",ans:'',done:false},
+        {id:'q5',text:'Quels produits génèrent des pertes ?',hint:"df[df['Profit']<0].groupby('Product Name')['Profit'].sum().sort_values().head(10)",ans:'',done:false},
+      ]
+    },
+  ]
+};
+
+const SKILLS = [
+  {name:'Charger un CSV',pct:30,badge:'✅'},{name:'Explorer un dataset',pct:30,badge:'✅'},
+  {name:'Nettoyer les données',pct:20,badge:''},{name:'Analyser les données',pct:20,badge:''},
+  {name:'Syntaxe Python',pct:20,badge:''},{name:'Visualisation Matplotlib',pct:10,badge:'🆕',color:true},
+  {name:'SQL',pct:0,badge:'',dim:true},
+];
+
+// ══════════════════════════════════════════════════════
+// MOTIVATIONS
+// ══════════════════════════════════════════════════════
+const MOTIVS = [
+  {color:'#4f6ef7',tag:'Mathématique',formula:'1,01<sup>365</sup> = <strong>37,78</strong>',body:'Si tu t\'améliores de <strong>1 % chaque jour</strong>, tu seras 37 fois meilleure en un an. Pas besoin d\'être parfaite. Juste un peu mieux qu\'hier, chaque soir.'},
+  {color:'#5ecfa0',tag:'Histoire vraie · J.K. Rowling',body:'Mère célibataire, déprimée, vivant de l\'aide sociale. <strong>12 éditeurs ont refusé Harry Potter.</strong> Le 13ᵉ a dit oui. Ses livres ont été vendus à plus de 500 millions d\'exemplaires. Elle n\'a pas abandonné quand tout disait d\'arrêter.'},
+  {color:'#f5b942',tag:'Mathématique',formula:'30 min × 90 jours = <strong>45 heures</strong>',body:'Trente minutes par soir pendant 90 jours, c\'est <strong>45 heures de pratique data</strong>. L\'équivalent d\'une semaine de travail complète, construite soir après soir.'},
+  {color:'#f472b6',tag:'Histoire vraie · Malala Yousafzai',body:'Elle voulait apprendre dans un pays qui lui interdisait l\'école. Elle a survécu à une tentative d\'assassinat à 15 ans. À 17 ans, elle devient la <strong>plus jeune lauréate du prix Nobel de la paix.</strong> Personne ne peut t\'enlever ce que tu mets dans ta tête.'},
+  {color:'#a78bfa',tag:'Réflexion',quote:'« La discipline, ce n\'est pas de se forcer. C\'est de <strong>revenir</strong>, même après une journée difficile. Revenir, c\'est tout. »',src:'James Clear — Atomic Habits'},
+  {color:'#5ecfa0',tag:'Histoire vraie · Simone Veil',body:'Survivante d\'Auschwitz, elle a tout perdu et tout reconstruit. Elle est devenue ministre de la Santé, puis présidente du Parlement européen. <strong>Elle a reconstruit à partir de rien, plusieurs fois.</strong> Toi, tu construis à partir de maintenant.'},
+  {color:'#4f6ef7',tag:'Mathématique',formula:'Projet 1 → 2 → 3 → 4 = <strong>Portfolio</strong>',body:'Un projet seul, c\'est du travail. Quatre projets publiés sur GitHub, c\'est une <strong>preuve concrète de compétence.</strong> Les recruteurs veulent voir ce que tu sais faire — tu es en train de le construire.'},
+  {color:'#f5b942',tag:'Histoire vraie · Oprah Winfrey',body:'Renvoyée de son premier emploi TV car jugée "trop émotive". Elle a tout recommencé. Elle est devenue <strong>la présentatrice la plus influente du monde.</strong> Ce qu\'on appelle une faiblesse peut devenir une force.'},
+  {color:'#5ecfa0',tag:'Spirituel · Hadith',quote:'« Innamā al-aʿmālu bin-niyyāt. »<br>Les actes ne valent que par les intentions.',src:'Rapporté par al-Bukhârî et Muslim — Tu as une intention sincère. C\'est déjà quelque chose de rare.'},
+  {color:'#f472b6',tag:'Réflexion',quote:'« Tu n\'as pas à voir tout l\'escalier. <strong>Commence juste par monter la première marche.</strong> »',src:'Martin Luther King Jr.'},
+  {color:'#a78bfa',tag:'Histoire vraie · Marie Curie',body:'Femme étrangère dans un monde scientifique qui ne la voulait pas. Refusée à l\'Académie des sciences française — <strong>même après deux prix Nobel dans deux disciplines différentes.</strong> Elle n\'a jamais arrêté de travailler. Jamais.'},
+  {color:'#4f6ef7',tag:'Réflexion',quote:'« Ce que tu fais <em>ce soir</em> construit la personne que tu seras en juillet. »',src:'Chaque 30 minutes compte.'},
+];
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+function loadData() {
+  if (localStorage.getItem('acad_ver') !== VER) {
+    localStorage.removeItem('acad_data');
+    localStorage.setItem('acad_ver', VER);
+  }
+  try { const s = localStorage.getItem('acad_data'); return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT)); }
+  catch { return JSON.parse(JSON.stringify(DEFAULT)); }
+}
+function save() { localStorage.setItem('acad_data', JSON.stringify(D)); }
+
+let D = loadData();
+let curProjId = D.projets[0]?.id || null;
+let motivIdx = parseInt(localStorage.getItem('motiv_idx')||'0') % MOTIVS.length;
+
+const TODAY_ISO = new Date().toISOString().slice(0,10);
+const TODAY_KEY = 'track_' + TODAY_ISO;
+
+// ══════════════════════════════════════════════════════
+// THEME
+// ══════════════════════════════════════════════════════
+function setTheme(t, el) {
+  document.documentElement.setAttribute('data-theme', t === 'royal' ? '' : t);
+  document.querySelectorAll('.th-btn').forEach(b => b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  localStorage.setItem('theme', t);
+}
+(function(){
+  const t = localStorage.getItem('theme')||'royal';
+  const btn = document.querySelector('.th-'+t) || document.querySelector('.th-royal');
+  setTheme(t, btn);
+})();
+
+// ══════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════
+const SB = {accueil:'sb-accueil',projets:'sb-projets',niveau:'sb-niveau',commandes:'sb-niveau'};
+function goTab(key, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+key).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  else { const t=document.querySelector(`.tab[data-tab="${key}"]`); if(t) t.classList.add('active'); }
+  ['sb-accueil','sb-projets','sb-niveau'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  const s=SB[key];if(s){const e=document.getElementById(s);if(e)e.style.display='block';}
+  if(key==='projets') renderProjView(curProjId);
+}
+function openProjTab(id) { curProjId=id; goTab('projets',null); renderProjView(id); }
+
+// ══════════════════════════════════════════════════════
+// COUNTDOWN
+// ══════════════════════════════════════════════════════
+function buildCountdown() {
+  const start = new Date(2026,2,20), end = new Date(2026,5,1);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const total = Math.ceil((end-start)/86400000);
+  const elapsed = Math.max(0,Math.ceil((today-start)/86400000));
+  const left = Math.max(0,Math.ceil((end-today)/86400000));
+  const pct = Math.min(100,Math.round(elapsed/total*100));
+  document.getElementById('cd-days').textContent = left;
+  document.getElementById('cd-done').textContent = elapsed;
+  document.getElementById('cd-pct').textContent = pct+'%';
+}
+
+// ══════════════════════════════════════════════════════
+// STREAK
+// ══════════════════════════════════════════════════════
+function calcStreak() {
+  let s=0;
+  for(let i=0;i<180;i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const k='track_'+d.toISOString().slice(0,10);
+    const data=JSON.parse(localStorage.getItem(k)||'{}');
+    if(Object.values(data).some(Boolean)) s++;
+    else if(i>0) break;
+  }
+  return s;
+}
+function buildStreak() {
+  const today = JSON.parse(localStorage.getItem(TODAY_KEY)||'{}');
+  const hasToday = Object.values(today).some(Boolean);
+  const streak = calcStreak();
+  document.getElementById('streak-n').textContent = streak;
+  const warn = document.getElementById('streak-warn');
+  if(!hasToday && streak>0) warn.textContent = '⚠️ Tu n\'as encore rien coché aujourd\'hui !';
+  else if(!hasToday && streak===0) warn.textContent = 'Commence ce soir — ton premier jour !';
+  else warn.textContent = '✓ Bien joué aujourd\'hui !';
+}
+
+// ══════════════════════════════════════════════════════
+// WEEK STRIP
+// ══════════════════════════════════════════════════════
+function buildWeek() {
+  const JOURS=['D','L','M','M','J','V','S'];
+  const row=document.getElementById('week-strip'); row.innerHTML='';
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const k='track_'+d.toISOString().slice(0,10);
+    const data=JSON.parse(localStorage.getItem(k)||'{}');
+    const hasDone=Object.values(data).some(Boolean);
+    const isToday=i===0;
+    const div=document.createElement('div');
+    div.className='wd'+(hasDone?' done':'')+(isToday?' today':'');
+    div.innerHTML=`<div class="wdl">${JOURS[d.getDay()]}</div><div>${d.getDate()}</div>`;
+    row.appendChild(div);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// TRACKING
+// ══════════════════════════════════════════════════════
+function buildTracking() {
+  const saved=JSON.parse(localStorage.getItem(TODAY_KEY)||'{}');
+  const grid=document.getElementById('track-grid'); grid.innerHTML='';
+  D.objectifs.forEach(m=>{
+    const done=saved[m.id]||false;
+    const c=document.createElement('div');
+    c.className='track-card'+(done?' done':'');
+    c.innerHTML=`<div class="ti">${m.icon}</div><div class="tinfo"><div class="tn">${m.name}</div><div class="ts">${m.sub}</div></div><div class="tcheck">${done?'✓':''}</div><span class="tdel" onclick="delObj('${m.id}',event)">✕</span>`;
+    c.onclick=(e)=>{
+      if(e.target.classList.contains('tdel')) return;
+      const s=JSON.parse(localStorage.getItem(TODAY_KEY)||'{}');
+      s[m.id]=!s[m.id]; localStorage.setItem(TODAY_KEY,JSON.stringify(s));
+      buildTracking(); buildWeek(); buildStreak();
+    };
+    grid.appendChild(c);
+  });
+}
+function delObj(id,e){e.stopPropagation();D.objectifs=D.objectifs.filter(o=>o.id!==id);save();buildTracking();}
+
+// ══════════════════════════════════════════════════════
+// MOTIVATION
+// ══════════════════════════════════════════════════════
+function renderMotiv() {
+  const m=MOTIVS[motivIdx];
+  document.getElementById('motiv-stripe').style.background=m.color;
+  document.getElementById('motiv-tag').textContent=m.tag;
+  document.getElementById('motiv-tag').style.color=m.color;
+  let html='';
+  if(m.formula) html+=`<div class="motiv-formula" style="color:${m.color}">${m.formula}</div>`;
+  if(m.quote)   html+=`<div class="motiv-quote">${m.quote}</div>`;
+  if(m.src)     html+=`<div class="motiv-src">— ${m.src}</div>`;
+  if(m.body)    html+=`<div class="motiv-body">${m.body}</div>`;
+  document.getElementById('motiv-content').innerHTML=html;
+  const dots=document.getElementById('motiv-dots'); dots.innerHTML='';
+  MOTIVS.forEach((_,i)=>{const d=document.createElement('div');d.className='mdot'+(i===motivIdx?' active':'');d.onclick=()=>{motivIdx=i;localStorage.setItem('motiv_idx',i);renderMotiv();};dots.appendChild(d);});
+}
+function nextMotiv(){motivIdx=(motivIdx+1)%MOTIVS.length;localStorage.setItem('motiv_idx',motivIdx);renderMotiv();}
+function prevMotiv(){motivIdx=(motivIdx-1+MOTIVS.length)%MOTIVS.length;localStorage.setItem('motiv_idx',motivIdx);renderMotiv();}
+
+// ══════════════════════════════════════════════════════
+// SIDEBAR PROJETS
+// ══════════════════════════════════════════════════════
+function renderSbProjets(){
+  const list=document.getElementById('sb-proj-list'); list.innerHTML='';
+  D.projets.forEach(p=>{
+    const done=p.questions.filter(q=>q.done).length, total=p.questions.length;
+    const pct=total?Math.round(done/total*100):0;
+    const div=document.createElement('div');
+    div.className='sb-item'+(p.id===curProjId?' active':'');
+    const emoji=p.title.match(/[\u{1F300}-\u{1FAFF}]/u)?.[0]||'📁';
+    const cleanTitle=p.title.replace(/[\u{1F300}-\u{1FAFF}]/gu,'').trim();
+    div.innerHTML=`<span style="font-size:14px;flex-shrink:0">${emoji}</span><span style="font-size:12.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cleanTitle}</span><div class="pbar-mini"><div class="pbar-fill" style="width:${pct}%;background:${p.color}"></div></div><span class="sb-del" onclick="delProj('${p.id}',event)">✕</span>`;
+    div.onclick=()=>openProjTab(p.id);
+    list.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// PROJET VIEW
+// ══════════════════════════════════════════════════════
+function renderProjView(id){
+  const p=D.projets.find(x=>x.id===id);
+  const cont=document.getElementById('proj-content');
+  if(!p){cont.innerHTML='<div style="padding:2rem;color:var(--muted)">Aucun projet. Ajoute-en un via le ＋ dans la sidebar.</div>';renderSbProjets();return;}
+
+  const qDone=p.questions.filter(q=>q.done).length, qTotal=p.questions.length;
+  const sDone=p.steps.filter(s=>s.done).length, sTotal=p.steps.length;
+  const pct=qTotal?Math.round(qDone/qTotal*100):0;
+  const offset=201-(201*pct/100);
+
+  const stepsHTML=p.steps.map((s,i)=>{
+    const isDone=s.done, isCur=!isDone&&p.steps.slice(0,i).every(x=>x.done);
+    return `<div class="step ${isDone?'done':''} ${isCur?'current':''}" onclick="toggleStep('${p.id}','${s.id}')">
+      <div class="step-left"><div class="step-num">${isDone?'✓':i+1}</div>${i<sTotal-1?'<div class="step-line"></div>':''}</div>
+      <div class="step-body">
+        <div class="step-title">${s.title}</div>
+        <div class="step-desc">${s.desc}</div>
+        ${s.code?`<div class="step-code">${s.code.replace(/\n/g,'<br>')}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const qHTML=p.questions.map((q,i)=>`
+    <div class="q-item ${q.done?'done-q':''}" onclick="toggleQ('${p.id}','${q.id}')">
+      <div class="q-num">Q${i+1}</div>
+      <div class="q-body">
+        <div class="q-text">${q.text}</div>
+        ${q.done&&q.ans?`<div class="q-ans">✓ ${q.ans}</div>`:''}
+        ${!q.done&&q.hint?`<div class="q-hint">${q.hint}</div>`:''}
+      </div>
+      <div class="q-check">${q.done?'✓':'○'}</div>
+      <span class="qdel" onclick="delQ('${p.id}','${q.id}',event)">✕</span>
+    </div>`).join('');
+
+  const toolsHTML=p.skills.map(t=>`
+    <div class="tool-row">
+      <div class="tool-name">${t.name}</div>
+      <div class="tool-bar"><div class="tool-fill" style="width:${t.pct}%;background:${p.color}"></div></div>
+      <div class="tool-lvl">${t.pct?t.pct+'%':'—'}</div>
+    </div>`).join('');
+
+  const clHTML=['Dataset téléchargé','Données explorées','Données nettoyées',`${qDone}/${qTotal} questions résolues`,'Graphiques créés','Publié sur GitHub']
+    .map((l,i)=>`<div class="cl-item ${i<sDone?'ok':''}"><div class="cl-dot"></div>${l}</div>`).join('');
+
+  cont.innerHTML=`
+    <div class="proj-hero">
+      <div class="proj-badge" style="color:${p.color}">${p.status}</div>
+      <h1>${p.title}</h1>
+      <p>${p.context}</p>
+      <div class="chip-row">
+        ${p.skills.map(s=>`<span class="chip chip-accent">${s.name}</span>`).join('')}
+        <span class="chip ${p.status==='En cours'?'chip-green':'chip-amber'}">${p.status}</span>
+      </div>
+    </div>
+    <div class="proj-layout">
+      <div class="proj-main">
+        <div class="ct" style="margin-bottom:.8rem">Étapes à suivre <small style="color:var(--muted);font-size:11px;margin-left:6px">${sDone}/${sTotal} terminées</small></div>
+        <div class="steps">${stepsHTML}</div>
+        <div class="ct">Questions à résoudre <button class="add-btn" onclick="openModal('question','${p.id}')">＋ Ajouter</button></div>
+        <div class="q-list">${qHTML||'<div style="color:var(--muted);font-size:13px">Aucune question pour l\'instant.</div>'}</div>
+        <div class="tools-section">
+          <div class="ct" style="margin-bottom:.6rem">Outils utilisés dans ce projet</div>
+          ${toolsHTML}
+        </div>
+      </div>
+      <div class="proj-aside">
+        <div class="aside-t">Avancement</div>
+        <div class="ring-wrap">
+          <div class="ring">
+            <svg width="78" height="78" viewBox="0 0 78 78">
+              <circle cx="39" cy="39" r="32" fill="none" stroke="var(--bg4)" stroke-width="7"/>
+              <circle cx="39" cy="39" r="32" fill="none" stroke="${p.color}" stroke-width="7"
+                stroke-dasharray="201" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+            </svg>
+            <div class="ring-num" style="color:${p.color}">${pct}%</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:12px;color:var(--muted);margin-bottom:.9rem">${qDone}/${qTotal} questions · ${sDone}/${sTotal} étapes</div>
+        <div class="aside-t">Checklist</div>
+        <div class="cl-list">${clHTML}</div>
+        <button class="del-btn" onclick="delProj('${p.id}',null)">🗑 Supprimer ce projet</button>
+      </div>
+    </div>`;
+  renderSbProjets();
+}
+
+function toggleStep(pId,sId){
+  const p=D.projets.find(x=>x.id===pId); if(!p) return;
+  const s=p.steps.find(x=>x.id===sId); if(!s) return;
+  s.done=!s.done; save(); renderProjView(pId);
+}
+function toggleQ(pId,qId){
+  const p=D.projets.find(x=>x.id===pId); if(!p) return;
+  const q=p.questions.find(x=>x.id===qId); if(!q) return;
+  q.done=!q.done; save(); renderProjView(pId);
+}
+function delQ(pId,qId,e){e.stopPropagation();const p=D.projets.find(x=>x.id===pId);if(!p)return;p.questions=p.questions.filter(x=>x.id!==qId);save();renderProjView(pId);}
+function delProj(id,e){if(e)e.stopPropagation();if(!confirm('Supprimer ce projet ?'))return;D.projets=D.projets.filter(p=>p.id!==id);curProjId=D.projets[0]?.id||null;save();renderSbProjets();renderProjView(curProjId);}
+
+// ══════════════════════════════════════════════════════
+// NIVEAU
+// ══════════════════════════════════════════════════════
+function buildSkills(){
+  const el=document.getElementById('skills-list'); el.innerHTML='';
+  SKILLS.forEach(s=>{
+    el.innerHTML+=`<div class="sk-row">
+      <div class="sk-name">${s.name} ${s.badge||''}</div>
+      <div class="sk-bar"><div class="sk-fill" style="width:${s.pct}%;${s.color?'background:var(--amber)':''}${s.dim?'background:var(--dim)':''}"></div></div>
+      <div class="sk-val" style="${s.dim?'color:var(--dim)':''}${s.color?'color:var(--amber)':''}">${s.pct?s.pct/10+'/10':'0/10'}</div>
+    </div>`;
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════════
+let mType='', mProjId='';
+function openModal(type,projId){
+  mType=type; mProjId=projId||'';
+  const ov=document.getElementById('overlay'); ov.classList.remove('hidden');
+  const title={objectif:'Ajouter un objectif',projet:'Ajouter un projet',question:'Ajouter une question'}[type];
+  document.getElementById('modal-title').textContent=title;
+  let body='';
+  if(type==='objectif') body=`
+    <div class="fg"><label class="fl">Icône (emoji)</label><input class="fi" id="m-icon" value="⭐" maxlength="4"></div>
+    <div class="fg"><label class="fl">Nom de l'objectif</label><input class="fi" id="m-name" placeholder="ex: Méditation"></div>
+    <div class="fg"><label class="fl">Description courte</label><input class="fi" id="m-sub" placeholder="ex: 10 min par jour"></div>`;
+  else if(type==='projet') body=`
+    <div class="fg"><label class="fl">Titre du projet</label><input class="fi" id="m-title" placeholder="ex: Titanic 🚢"></div>
+    <div class="fg"><label class="fl">Mise en situation</label><textarea class="ft" id="m-ctx" placeholder="Tu es data analyst pour..."></textarea></div>
+    <div class="fg"><label class="fl">Compétences (séparées par des virgules)</label><input class="fi" id="m-skills" placeholder="ex: pandas, groupby, matplotlib"></div>
+    <div class="fg"><label class="fl">Couleur</label><select class="fsel" id="m-color"><option value="#4f6ef7">Bleu</option><option value="#5ecfa0">Vert</option><option value="#f5b942">Ambre</option><option value="#f472b6">Rose</option><option value="#a78bfa">Violet</option></select></div>`;
+  else if(type==='question') body=`
+    <div class="fg"><label class="fl">Question à résoudre</label><textarea class="ft" id="m-qt" placeholder="ex: Quel est le prix moyen ?"></textarea></div>
+    <div class="fg"><label class="fl">Indice de code (optionnel)</label><input class="fi" id="m-hint" placeholder="ex: df['col'].mean()"></div>`;
+  document.getElementById('modal-body').innerHTML=body;
+  setTimeout(()=>{const f=document.querySelector('#modal-body .fi,.ft');if(f)f.focus();},50);
+}
+function closeModal(){document.getElementById('overlay').classList.add('hidden');}
+function overlayClick(e){if(e.target===document.getElementById('overlay'))closeModal();}
+function confirmModal(){
+  if(mType==='objectif'){
+    const icon=document.getElementById('m-icon').value.trim()||'⭐';
+    const name=document.getElementById('m-name').value.trim(); if(!name) return;
+    const sub=document.getElementById('m-sub').value.trim();
+    D.objectifs.push({id:'o_'+Date.now(),icon,name,sub}); save(); buildTracking();
+  } else if(mType==='projet'){
+    const title=document.getElementById('m-title').value.trim(); if(!title) return;
+    const ctx=document.getElementById('m-ctx').value.trim();
+    const rawSkills=document.getElementById('m-skills').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const skills=rawSkills.map(s=>({name:s,pct:10}));
+    const color=document.getElementById('m-color').value;
+    const np={id:'p_'+Date.now(),title,context:ctx||'Aucune mise en situation.',color,status:'À venir',skills,steps:[],questions:[]};
+    D.projets.push(np); save(); curProjId=np.id; renderSbProjets(); openProjTab(np.id);
+  } else if(mType==='question'){
+    const text=document.getElementById('m-qt').value.trim(); if(!text) return;
+    const hint=document.getElementById('m-hint').value.trim();
+    const p=D.projets.find(x=>x.id===mProjId); if(!p) return;
+    p.questions.push({id:'q_'+Date.now(),text,hint,ans:'',done:false}); save(); renderProjView(mProjId);
+  }
+  closeModal();
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+const hr=new Date().getHours();
+const greet=hr<5?'Bonne nuit 🌙':hr<12?'Bonjour ☀️':hr<18?'Bon après-midi 🌤️':'Bonsoir 🌙';
+// greeting inside page header
+const ph=document.querySelector('#page-accueil');
+const greetEl=document.querySelector('#page-accueil .ph h1');
+
+buildCountdown();
+buildStreak();
+buildWeek();
+buildTracking();
+renderMotiv();
+renderSbProjets();
+buildSkills();
+
+// show correct sidebar
+['sb-accueil','sb-projets','sb-niveau'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+document.getElementById('sb-accueil').style.display='block';
+
+// update greeting in topbar area
+document.querySelector('.ph')?.remove();
+const cdHero=document.querySelector('.countdown-hero');
+if(cdHero){
+  const h=document.createElement('div');
+  h.className='ph';
+  h.innerHTML=`<h1>${greet}</h1><p id="today-date-line"></p>`;
+  cdHero.parentNode.insertBefore(h,cdHero);
+}
+const MOIS=['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+const JFULL=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const now=new Date();
+const dl=document.getElementById('today-date-line');
+if(dl) dl.textContent=JFULL[now.getDay()]+' '+now.getDate()+' '+MOIS[now.getMonth()]+' '+now.getFullYear();
+
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!document.getElementById('overlay').classList.contains('hidden'))confirmModal();if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>
