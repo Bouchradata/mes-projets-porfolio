@@ -1,134 +1,130 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Portfolio Data Analyst - Bouchra</title>
+<meta charset="UTF-8">
+<title>Portfolio Bouchra - Data Analyst</title>
 
-    <style>
-        body {
-            font-family: Arial;
-            margin: 0;
-            background-color: #f4f6f8;
-        }
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background-color: #f5f1ea;
+}
 
-        header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            padding: 40px;
-            text-align: center;
-        }
+header {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
 
-        section {
-            padding: 30px;
-            max-width: 900px;
-            margin: auto;
-        }
+section {
+    padding: 30px;
+    max-width: 900px;
+    margin: auto;
+}
 
-        h2 {
-            margin-bottom: 10px;
-        }
+.card {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+}
 
-        .card {
-            background: white;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 12px;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
+.step {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 5px 0;
+    background: #e5e7eb;
+}
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
+.step.done {
+    background: #1e3a8a;
+    color: white;
+}
 
-        a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: bold;
-        }
+a {
+    color: #1e3a8a;
+    text-decoration: none;
+    font-weight: bold;
+}
 
-        a:hover {
-            text-decoration: underline;
-        }
+button {
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    background: #1e3a8a;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+</style>
 
-        .skills span {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 6px 10px;
-            margin: 5px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #2c3e50;
-            color: white;
-        }
-    </style>
 </head>
 
 <body>
 
 <header>
     <h1>Bouchra - Data Analyst</h1>
-    <p>Python | Analyse de données | Objectif : Freelance 💼</p>
+    <p>Portfolio interactif | Suivi de progression</p>
 </header>
 
 <section>
-    <h2>👩‍💻 À propos</h2>
-    <p>
-        Je suis en train de développer mes compétences en data analysis à travers des projets concrets.
-        Mon objectif est de devenir freelance et travailler sur des missions en analyse de données.
-    </p>
-</section>
 
-<section>
     <h2>📊 Mes projets</h2>
 
     <div class="card">
         <h3>🏠 Analyse Airbnb</h3>
-        <p>Analyse des prix et des zones rentables pour investissement immobilier.</p>
-        <a href="https://github.com/Bouchradata/projet-airbnb" target="_blank">Voir le projet</a>
-    </div>
+        <p>Objectif : identifier les zones rentables</p>
 
-    <div class="card">
-        <h3>📈 Projet Data Visualization</h3>
-        <p>Création de dashboards pour visualiser des données business.</p>
-        <a href="#">Bientôt disponible</a>
-    </div>
+        <div class="step" onclick="toggleStep(this)">Collecte des données</div>
+        <div class="step" onclick="toggleStep(this)">Nettoyage des données</div>
+        <div class="step" onclick="toggleStep(this)">Analyse exploratoire</div>
+        <div class="step" onclick="toggleStep(this)">Visualisation</div>
 
-    <div class="card">
-        <h3>🤖 Projet Machine Learning</h3>
-        <p>Modèle de prédiction basé sur des données réelles.</p>
-        <a href="#">Bientôt disponible</a>
+        <br>
+        <a href="https://github.com/Bouchradata/projet-airbnb" target="_blank">
+            🔗 Voir sur GitHub
+        </a>
     </div>
 
 </section>
 
 <section>
-    <h2>🧠 Compétences</h2>
+    <h2>➕ Ajouter un projet</h2>
 
-    <div class="skills">
-        <span>Python</span>
-        <span>Pandas</span>
-        <span>Data Visualisation</span>
-        <span>Machine Learning</span>
-        <span>SQL</span>
-    </div>
+    <input type="text" id="projectName" placeholder="Nom du projet">
+    <button onclick="addProject()">Ajouter</button>
+
+    <div id="projects"></div>
 </section>
 
-<section>
-    <h2>📞 Contact</h2>
-    <p>Email : tonemail@email.com</p>
-    <p>LinkedIn : à ajouter</p>
-</section>
+<script>
+function toggleStep(element) {
+    element.classList.toggle("done");
+}
 
-<footer>
-    <p>© 2026 - Bouchra Data Analyst</p>
-</footer>
+function addProject() {
+    let name = document.getElementById("projectName").value;
+
+    if(name === "") return;
+
+    let container = document.getElementById("projects");
+
+    let newProject = document.createElement("div");
+    newProject.className = "card";
+    newProject.innerHTML = `
+        <h3>${name}</h3>
+        <div class="step" onclick="toggleStep(this)">Étape 1</div>
+        <div class="step" onclick="toggleStep(this)">Étape 2</div>
+        <div class="step" onclick="toggleStep(this)">Étape 3</div>
+    `;
+
+    container.appendChild(newProject);
+}
+</script>
 
 </body>
 </html>
