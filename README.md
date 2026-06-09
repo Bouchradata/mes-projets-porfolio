@@ -21,7 +21,9 @@ J'ai obtenue le Certificat  Google Data Analytics en octobre 2025 en integrant I
 
 
 Me contacter
-* **LinkedIn :** [Mon profil LinkedIn](https://www.linkedin.com)
-* **Malt :** [Mon profil Malt](https://www.malt.fr)
+> LinkedIn : https://www.linkedin.com
+> Malt : https://www.malt.fr
+> Tableau : https://public.tableau.com/app/profile/bouchra.bendimya/vizzes
+
 suivi de mes projets
      https://bouchradata.github.io/mes-projets-porfolio/
