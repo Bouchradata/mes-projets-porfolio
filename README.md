@@ -1,7 +1,7 @@
 
 Bienvenue sur mon Portfolio de Data Analyst !
 
-Je m'appelle BENDIMYA Bouchra, j'ai découvert l'univers de la Data par hasard, et je me suis prise au jeu d'explorer des données complexes, faire parler les chiffres avec SQL/Python, et concevoir des tableaux de bord interactifs pour piloter la performance.
+Je m'appelle BENDIMYA Bouchra, j'ai découvert l'univers de la Data par hasard en voulant me perfectionner sur excel,  et je me suis prise au jeu d'explorer des données complexes, faire parler les chiffres avec SQL/Python, et concevoir des tableaux de bord interactifs pour piloter la performance.
 
 J'ai obtenu le Certificat  Google Data Analytics en octobre 2025 en intégrant INCO ACADEMY.
  J'ai appris à utiliser plusieurs outils comme SQL, Python, Excel, Tableau.
@@ -14,8 +14,8 @@ J'ai obtenu le Certificat  Google Data Analytics en octobre 2025 en intégrant I
 
  Ma Boîte à Outils (Hard Skills)
 
-* **Langages & Requêtage :** SQL (SQLite, PostgreSQL), Python (Pandas, NumPy)
-* **Visualisation :** Tableau Desktop, Excel (TCD, Graphiques avancés)
+* **Langages & Requêtage :** SQL (SQLite, BigQuery), Python (Pandas, NumPy)
+* **Visualisation : Tableau Desktop et public,  Excel (TCD, Graphiques avancés)
 
 
 
